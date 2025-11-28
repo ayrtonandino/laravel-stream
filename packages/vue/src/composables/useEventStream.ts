@@ -103,7 +103,7 @@ export const useEventStream = (
         closeConnection();
     });
 
-    watch(reactiveUrl, (newUrl: string, oldUrl: string) => {
+    watch(() => reactiveUrl.value, (newUrl: string, oldUrl: string) => {
         if (newUrl !== oldUrl) {
             closeConnection();
             setupConnection();
