@@ -600,7 +600,7 @@ describe("useStream url reactivity with ref and getter", () => {
 
         urlRef.value = jsonData[1].api;
 
-        expect(result.data.value).toBe(null);
+        expect(result.data.value).toBe('');
 
         result.send({});
         await vi.waitFor(() => expect(result.isStreaming.value).toBe(true));
@@ -620,7 +620,7 @@ describe("useStream url reactivity with ref and getter", () => {
 
         currentUrl = jsonData[1].api;
 
-        expect(result.data.value).toBe(null);
+        expect(result.data.value).toBe('');
 
         result.send({});
         await vi.waitFor(() => expect(result.isStreaming.value).toBe(true));
@@ -645,7 +645,7 @@ describe("useStream url reactivity with ref and getter", () => {
         result.send({});
         await vi.waitFor(() => expect(result.isStreaming.value).toBe(true));
         await vi.waitFor(() => expect(result.isStreaming.value).toBe(false));
-        expect(result.data.value).toBe(JSON.stringify(jsonData[1].data));
+        expect(result.data.value).toBe(jsonData[1].data);
     });
 
     it("reacts when url is a getter (useJsonStream)", async () => {
@@ -656,7 +656,7 @@ describe("useStream url reactivity with ref and getter", () => {
         result.send({});
         await vi.waitFor(() => expect(result.isStreaming.value).toBe(true));
         await vi.waitFor(() => expect(result.isStreaming.value).toBe(false));
-        expect(result.data.value).toBe(JSON.stringify(jsonData[0].data));
+        expect(result.data.value).toBe(jsonData[0].data);
 
         currentUrl = jsonData[1].api;
 
@@ -665,6 +665,6 @@ describe("useStream url reactivity with ref and getter", () => {
         result.send({});
         await vi.waitFor(() => expect(result.isStreaming.value).toBe(true));
         await vi.waitFor(() => expect(result.isStreaming.value).toBe(false));
-        expect(result.data.value).toBe(JSON.stringify(jsonData[1].data));
+        expect(result.data.value).toBe(jsonData[1].data);
     });
 });
