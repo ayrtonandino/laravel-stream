@@ -9,22 +9,22 @@ import {
     it,
     vi,
 } from "vitest";
-import { ref, createApp } from "vue";
+import { ref, createApp, MaybeRefOrGetter, App, computed } from "vue";
 import { useJsonStream, useStream } from "../src/composables/useStream";
 
-function withSetup(composable) {
+function withSetup<T>(composable: () => T): [T, App<Element>] {
     let result;
 
     const app = createApp({
         setup() {
             result = composable();
-            return () => {};
+            return () => { };
         },
     });
 
     app.mount(document.createElement("div"));
 
-    return [result, app];
+    return [result as T, app];
 }
 
 describe("useStream", () => {
@@ -608,10 +608,12 @@ describe("useStream url reactivity", () => {
         expect(result.data.value).toBe(JSON.stringify(jsonData[1].data));
     });
 
-    it("reacts when url is a getter", async () => {
+    it("reacts when url is a computed value", async () => {
         let currentUrl = jsonData[0].api;
 
-        const [result] = withSetup(() => useStream(currentUrl, { json: true }));
+        const urlRef = computed(() => currentUrl);
+
+        const [result] = withSetup(() => useStream(urlRef, { json: true }));
 
         result.send({});
         await vi.waitFor(() => expect(result.isStreaming.value).toBe(true));
@@ -651,7 +653,9 @@ describe("useStream url reactivity", () => {
     it("reacts when url is a getter (useJsonStream)", async () => {
         let currentUrl = jsonData[0].api;
 
-        const [result] = withSetup(() => useJsonStream(currentUrl));
+        const urlRef = computed(() => currentUrl);
+
+        const [result] = withSetup(() => useJsonStream(urlRef));
 
         result.send({});
         await vi.waitFor(() => expect(result.isStreaming.value).toBe(true));

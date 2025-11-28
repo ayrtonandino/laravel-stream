@@ -232,13 +232,12 @@ export const useStream = <
         }
     });
 
-    watch(
-        () => reactiveUrl.value,
-        () => {
+    watch(reactiveUrl, (newUrl: string, oldUrl: string) => {
+        if (newUrl !== oldUrl) {
             cancel();
             clearData();
-        },
-    );
+        }
+    });
 
     return {
         data: readonly(data),
