@@ -600,7 +600,7 @@ describe("useStream url reactivity with ref and getter", () => {
 
         urlRef.value = jsonData[1].api;
 
-        expect(result.data.value).toBe('');
+        expect(result.data.value).toBe("");
 
         result.send({});
         await vi.waitFor(() => expect(result.isStreaming.value).toBe(true));
@@ -620,7 +620,7 @@ describe("useStream url reactivity with ref and getter", () => {
 
         currentUrl = jsonData[1].api;
 
-        expect(result.data.value).toBe('');
+        expect(result.data.value).toBe("");
 
         result.send({});
         await vi.waitFor(() => expect(result.isStreaming.value).toBe(true));
