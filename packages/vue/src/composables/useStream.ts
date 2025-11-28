@@ -38,7 +38,7 @@ export const useStream = <
     isFetching: Readonly<Ref<boolean>>;
     isStreaming: Readonly<Ref<boolean>>;
     id: string;
-    send: (body: TSendBody) => void;
+    send: (body?: TSendBody) => void;
     cancel: () => void;
     clearData: () => void;
 } => {
@@ -147,7 +147,7 @@ export const useStream = <
             });
     };
 
-    const send = (body: TSendBody) => {
+    const send = (body?: TSendBody) => {
         cancel();
         makeRequest(body);
         clearData();
