@@ -591,7 +591,7 @@ describe("useStream url reactivity", () => {
     it("reacts when url is a ref", async () => {
         const urlRef = ref(jsonData[0].api);
 
-        const [result] = withSetup(() => useStream(urlRef, { json: true }));
+        const result = useStream(urlRef, { json: true });
 
         result.send({});
         await vi.waitFor(() => expect(result.isStreaming.value).toBe(true));
