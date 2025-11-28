@@ -524,62 +524,68 @@ describe("useStream", () => {
             1: { api: "/stream/2", data: { test: "data2", value: 456 } },
         };
 
-        beforeEach(() => server.use(
-            http.post(jsonData[0].api, async () => {
-                await delay(20);
+        beforeEach(() =>
+            server.use(
+                http.post(jsonData[0].api, async () => {
+                    await delay(20);
 
-                return new HttpResponse(
-                    new ReadableStream({
-                        async start(controller) {
-                            await delay(20);
-                            controller.enqueue(
-                                new TextEncoder().encode('{"test":"data1",'),
-                            );
+                    return new HttpResponse(
+                        new ReadableStream({
+                            async start(controller) {
+                                await delay(20);
+                                controller.enqueue(
+                                    new TextEncoder().encode(
+                                        '{"test":"data1",',
+                                    ),
+                                );
 
-                            await delay(20);
-                            controller.enqueue(
-                                new TextEncoder().encode('"value":123}'),
-                            );
+                                await delay(20);
+                                controller.enqueue(
+                                    new TextEncoder().encode('"value":123}'),
+                                );
 
-                            controller.close();
+                                controller.close();
+                            },
+                        }),
+                        {
+                            status: 200,
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
                         },
-                    }),
-                    {
-                        status: 200,
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                    },
-                );
-            }),
-            http.post(jsonData[1].api, async () => {
-                await delay(20);
+                    );
+                }),
+                http.post(jsonData[1].api, async () => {
+                    await delay(20);
 
-                return new HttpResponse(
-                    new ReadableStream({
-                        async start(controller) {
-                            await delay(20);
-                            controller.enqueue(
-                                new TextEncoder().encode('{"test":"data2",'),
-                            );
+                    return new HttpResponse(
+                        new ReadableStream({
+                            async start(controller) {
+                                await delay(20);
+                                controller.enqueue(
+                                    new TextEncoder().encode(
+                                        '{"test":"data2",',
+                                    ),
+                                );
 
-                            await delay(20);
-                            controller.enqueue(
-                                new TextEncoder().encode('"value":456}'),
-                            );
+                                await delay(20);
+                                controller.enqueue(
+                                    new TextEncoder().encode('"value":456}'),
+                                );
 
-                            controller.close();
+                                controller.close();
+                            },
+                        }),
+                        {
+                            status: 200,
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
                         },
-                    }),
-                    {
-                        status: 200,
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                    },
-                );
-            }),
-        ));
+                    );
+                }),
+            ),
+        );
 
         it("reacts when url is a ref", async () => {
             const urlRef = ref(jsonData[0].api);
@@ -588,8 +594,14 @@ describe("useStream", () => {
 
             result.send();
             await vi.waitFor(() => expect(result.isStreaming.value).toBe(true));
-            await vi.waitFor(() => expect(result.isStreaming.value).toBe(false));
-            await vi.waitFor(() => expect(result.data.value).toBe(JSON.stringify(jsonData[0].data)));
+            await vi.waitFor(() =>
+                expect(result.isStreaming.value).toBe(false),
+            );
+            await vi.waitFor(() =>
+                expect(result.data.value).toBe(
+                    JSON.stringify(jsonData[0].data),
+                ),
+            );
 
             urlRef.value = jsonData[1].api;
 
@@ -599,7 +611,9 @@ describe("useStream", () => {
 
             result.send();
             await vi.waitFor(() => expect(result.isStreaming.value).toBe(true));
-            await vi.waitFor(() => expect(result.isStreaming.value).toBe(false));
+            await vi.waitFor(() =>
+                expect(result.isStreaming.value).toBe(false),
+            );
 
             expect(result.data.value).toBe(JSON.stringify(jsonData[1].data));
         });
@@ -611,8 +625,12 @@ describe("useStream", () => {
 
             result.send();
             await vi.waitFor(() => expect(result.isStreaming.value).toBe(true));
-            await vi.waitFor(() => expect(result.isStreaming.value).toBe(false));
-            await vi.waitFor(() => expect(result.data.value).toEqual(jsonData[0].data));
+            await vi.waitFor(() =>
+                expect(result.isStreaming.value).toBe(false),
+            );
+            await vi.waitFor(() =>
+                expect(result.data.value).toEqual(jsonData[0].data),
+            );
 
             urlRef.value = jsonData[1].api;
 
@@ -620,7 +638,9 @@ describe("useStream", () => {
 
             result.send();
             await vi.waitFor(() => expect(result.isStreaming.value).toBe(true));
-            await vi.waitFor(() => expect(result.isStreaming.value).toBe(false));
+            await vi.waitFor(() =>
+                expect(result.isStreaming.value).toBe(false),
+            );
 
             expect(result.data.value).toEqual(jsonData[1].data);
         });
