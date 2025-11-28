@@ -634,6 +634,10 @@ describe("useStream", () => {
 
             urlRef.value = jsonData[1].api;
 
+            await delay(20);
+
+            await vi.waitFor(() => expect(result.data.value).toBeNull());
+
             result.send();
             await vi.waitFor(() => expect(result.isStreaming.value).toBe(true));
             await vi.waitFor(() =>
