@@ -9,7 +9,7 @@ import {
     it,
     vi,
 } from "vitest";
-import { ref, createApp, MaybeRefOrGetter, App, computed } from "vue";
+import { ref, createApp, MaybeRefOrGetter, App, computed, nextTick } from "vue";
 import { useJsonStream, useStream } from "../src/composables/useStream";
 
 function withSetup<T>(composable: () => T): [T, App<Element>] {
@@ -600,6 +600,8 @@ describe("useStream url reactivity", () => {
 
         urlRef.value = jsonData[1].api;
 
+        await nextTick();
+
         await vi.waitFor(() => expect(result.data.value).toBe(""));
 
         expect(result.data.value).toBe("");
@@ -652,7 +654,7 @@ describe("useStream url reactivity", () => {
         expect(result.data.value).toEqual(jsonData[1].data);
     });
 
-    it("reacts when url is a getter (useJsonStream)", async () => {
+    it("reacts when url is a computed value (useJsonStream)", async () => {
         let currentUrl = jsonData[0].api;
 
         const urlRef = computed(() => currentUrl);
