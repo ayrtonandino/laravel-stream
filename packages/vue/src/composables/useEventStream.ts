@@ -103,12 +103,15 @@ export const useEventStream = (
         closeConnection();
     });
 
-    watch(() => reactiveUrl.value, (newUrl: string, oldUrl: string) => {
-        if (newUrl !== oldUrl) {
-            closeConnection();
-            setupConnection();
-        }
-    });
+    watch(
+        () => reactiveUrl.value,
+        (newUrl: string, oldUrl: string) => {
+            if (newUrl !== oldUrl) {
+                closeConnection();
+                setupConnection();
+            }
+        },
+    );
 
     return {
         message: readonly(message),

@@ -232,10 +232,13 @@ export const useStream = <
         }
     });
 
-    watch(() => reactiveUrl.value, () => {
-        cancel();
-        clearData();
-    });
+    watch(
+        () => reactiveUrl.value,
+        () => {
+            cancel();
+            clearData();
+        },
+    );
 
     return {
         data: readonly(data),
