@@ -18,7 +18,7 @@ function withSetup<T>(composable: () => T): [T, App<Element>] {
     const app = createApp({
         setup() {
             result = composable();
-            return () => { };
+            return () => {};
         },
     });
 
